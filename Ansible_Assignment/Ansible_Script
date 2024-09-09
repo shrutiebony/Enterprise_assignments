@@ -1,0 +1,26 @@
+- name: Deploy Webserver
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Configure Apache
+      template:
+        src: webserver.conf
+        dest: /etc/apache2/sites-enabled/webserver.conf
+        mode: 0644
+
+    - name: Start Apache
+      service:
+        name: apache2
+        state: started
+
+    - name: Create index.html
+      template:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: 0644
